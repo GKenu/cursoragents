@@ -7,12 +7,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - name: Install deps
-        run: npm ci || npm i
-      - name: Tests (with coverage if configured)
-        run: npm test -- --coverage || true
+
+      - name: Install deps (only if package.json exists)
+        run: |
+          if [ -f package.json ]; then
+            (npm ci || npm i) || true
+          else
+            echo "No package.json; skipping install."
+          fi
+
+      - name: Tests with coverage (only if package.json exists)
+        run: |
+          if [ -f package.json ]; then
+            npm test -- --coverage || true
+          else
+            echo "No package.json; skipping tests."
+          fi
+
       - name: Collect & commit metrics
         run: |
           export START_MS=$(date +%s%3N)
