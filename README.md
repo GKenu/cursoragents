@@ -6,30 +6,63 @@ Repositório público com agentes prontos para usar no **Cursor** durante o dese
 
 Padronizar a criação, revisão e testes de mudanças **em baby steps** (≤3 arquivos, ≤60 linhas), com explicações WHAT/WHY/HOW e testes mínimos por mudança.
 
-## 📂 Estrutura
+## 📦 Estrutura (v2)
 
+```
 cursoragents/
 ├─ agents/
-│ ├─ core-principles.json
-│ ├─ backend-engineer.json
-│ ├─ frontend-engineer.json
-│ ├─ data-engineer.json
-│ ├─ fullstack-engineer.json
-│ └─ qa-tests.json
-├─ prompts/ # (opcional) práticas e metaprompts
-├─ docs/ # (opcional) orquestração e métricas
+│  ├─ core-principles.json      # base comum (fonte da verdade)
+│  ├─ templates/                # variações específicas (fontes)
+│  │  ├─ backend.json
+│  │  ├─ frontend.json
+│  │  ├─ data.json
+│  │  ├─ fullstack.json
+│  │  └─ qa-tests.json
+│  └─ build.js                  # gera backend-agent.json, etc (artefatos)
+├─ docs/
+│  └─ orchestration.md          # playbook de hand-offs entre agentes
+├─ prompts/                     # boas práticas e metaprompts (opcional)
+│  ├─ cursor-practices.md
+│  ├─ system-prompt-patterns.md
+│  └─ agent-usage-playbook.md
 ├─ .gitignore
-└─ LICENSE
+├─ LICENSE
+└─ README.md
+```
 
-## ⚙️ Como usar no Cursor
+> Obs.: `agents/*-agent.json` são **artefatos gerados** e estão no `.gitignore`.
+
+## ☀️ Como usar no Cursor
 
 1. **Cursor → Settings → Agents → New Agent**
-2. Cole o conteúdo do arquivo JSON correspondente em **Instructions**.
-3. (Opcional) Configure permissões de terminal para executar:
+2. Abra um arquivo gerado (ex.: `agents/backend-agent.json`) e **cole o conteúdo** em **Instructions**.
+3. (Opcional) Permita executar no terminal:
    - `pnpm format`
    - `pnpm lint`
    - `pnpm test`
-4. Salve. Repita para cada agente que desejar.
+4. Salve. Repita para cada agente.
+
+## 🔧 Como gerar e usar os agentes (v2 – builder)
+
+Os arquivos finais para colar no Cursor são gerados a partir do **core** + **templates**.
+
+- Gerar: `node agents/build.js`
+- Os finais aparecem em `agents/*-agent.json` (e **não** são versionados).
+- Cole no Cursor em **Settings → Agents → New Agent → Instructions**.
+
+### Quando rodar o build?
+
+Sempre que você alterar:
+
+- `agents/core-principles.json` (regras comuns)
+- Qualquer template em `agents/templates/*.json`
+
+### Limpar e regenerar (opcional)
+
+```bash
+rm agents/*-agent.json 2>/dev/null || true
+node agents/build.js
+```
 
 ## 🔁 Fluxo recomendado
 
@@ -39,34 +72,18 @@ cursoragents/
 
 ## ✅ Padrões (Core)
 
-- Nunca duplicar lógica entre features (DRY).
-- Resolver com a solução mais simples que funciona (KISS).
-- Implementar só o necessário agora (YAGNI).
+- Nunca duplicar lógica entre features (**DRY**).
+- Resolver com a solução mais simples que funciona (**KISS**).
+- Implementar só o necessário agora (**YAGNI**).
 - **Pastas por feature**: `/src/<feature>/{components,services,hooks,db,types}`.
 - **SoC**: UI exibe; services tratam; DB integra; integrações em `/src/integrations/<vendor>`.
-- **Limites por passo**: ≤3 arquivos e ≤60 linhas.
-
-## 🧪 Testes
-
-- **Backend**: Vitest para services e rota mockada (supertest/Next utils).
-- **Frontend**: React Testing Library (render + interação + validação).
-- **Data**: fixtures determinísticas, asserts de shape e contagens.
-
-## 🔒 Variáveis e segurança
-
-- Centralize env em `src/config/env.ts` com zod (sem expor segredos no client).
-- Integrações em `src/integrations/<vendor>` com clientes e mapeadores separados.
-
-## 📜 Licença
-
-Escolha **MIT** (open source permissiva) ou **BUSL-1.1** (se pretende módulos pagos).  
-Adicione o arquivo `LICENSE` conforme a escolha.
+- **Limites por step**: ≤3 arquivos e ≤60 linhas.
 
 ## 🧭 Roadmap (sugerido)
 
-- v1: agentes e Core Principles (este repo).
-- v2: `docs/orchestration.md` com exemplos de prompts e fluxo de PRs.
-- v3: métricas leves de qualidade (tempo de review, taxa de retrabalho).
+- **v1**: agentes e Core Principles (concluído neste repo).
+- **v2**: orquestração e builder (este README + `agents/build.js` + `docs/orchestration.md`).
+- **v3**: métricas leves (tempo de review, taxa de retrabalho, cobertura do diff).
 
 ## 📖 Glossário de Princípios
 
@@ -84,7 +101,3 @@ Organização por domínio: `/src/<feature>/{components,services,hooks,db,types}
 
 **Separation of Concerns**  
 UI exibe; services tratam regra; DB garante integridade; integrações ficam em `/src/integrations/<vendor>`. Testes cobrem cada camada.
-
----
-
-**Dica:** mantenha os agentes estáveis em `main` e use `dev` para experimentar ajustes de prompt.
