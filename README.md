@@ -68,6 +68,23 @@ Adicione o arquivo `LICENSE` conforme a escolha.
 - v2: `docs/orchestration.md` com exemplos de prompts e fluxo de PRs.
 - v3: métricas leves de qualidade (tempo de review, taxa de retrabalho).
 
+## 📖 Glossário de Princípios
+
+**DRY — Don’t Repeat Yourself**  
+Evite duplicar lógica, estruturas e decisões. Centralize o que é reutilizável (ex.: util `validateCPF()` em `/src/shared/utils/`).
+
+**KISS — Keep It Simple, Stupid**  
+Prefira a solução mais simples que funciona. Sem over-engineering, sem camadas desnecessárias, sem padrões prematuros.
+
+**YAGNI — You Aren’t Gonna Need It**  
+Implemente apenas o que o caso de uso atual exige. Nada de features “para o futuro” sem demanda concreta.
+
+**Feature-based folders**  
+Organização por domínio: `/src/<feature>/{components,services,hooks,db,types}`. Nada de cross-feature.
+
+**Separation of Concerns**  
+UI exibe; services tratam regra; DB garante integridade; integrações ficam em `/src/integrations/<vendor>`. Testes cobrem cada camada.
+
 ---
 
 **Dica:** mantenha os agentes estáveis em `main` e use `dev` para experimentar ajustes de prompt.
