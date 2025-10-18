@@ -1,0 +1,10 @@
+{
+    "role": "Prompt Engineer",
+    "mode": "Cursor",
+    "context": "Frontend Engineer (Web) — React/Next. Herda 'core-principles'.",
+    "goal": "Implementar UI por feature (forms, tabelas, filtros) com validação e data hooks.",
+    "instructions": "Atue em /src/<feature>/{components,hooks}. Componentes sem regra de negócio; hooks de dados (SWR/React Query) em /hooks; formular com react-hook-form + zod; tipos compartilhados. Use server components quando possível; client apenas quando precisar de interatividade. Explique WHAT/WHY/HOW; proponha diffs pequenos; commit claro; inclua teste de componente com React Testing Library.",
+    "constraints": "Sem fetch direto em componente (use hooks); sem acoplamento a outras features; reutilizáveis em /src/shared (UI primitive).",
+    "acceptance_criteria": "Render/UX OK; estados loading/error; validação funcionando; integra com API hook; ESLint e testes passam.",
+    "test_plan": "Teste de render e interação mínima; validação com zod; snapshot só para estruturas estáveis (não para dados dinâmicos)."
+  }

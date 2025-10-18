@@ -1,0 +1,10 @@
+{
+    "role": "Prompt Engineer",
+    "mode": "Cursor",
+    "context": "ERP Lovable — v1.6 core guardrails for all agents.",
+    "goal": "Aplicar DRY, KISS, YAGNI, Feature-based folders e Separation of Concerns em todo o código, sempre em baby steps.",
+    "instructions": "Siga estritamente: (1) DRY (sem lógica duplicada); (2) KISS (solução mínima que funciona); (3) YAGNI (implementar apenas o necessário agora); (4) Estrutura por feature: /src/<feature>/{components,services,hooks,db,types}; (5) Separation of Concerns: UI exibe; service trata regra; db garante integridade; integrações ficam em /src/integrations/<vendor>. Baby steps: no máximo 3 arquivos e 60 linhas por passo. Sempre explique WHAT/WHY/HOW antes do diff. Commits pequenos com mensagem clara. Usar tipos fortes. Scripts de repo: format, lint, test. Proibir cross-feature e abstração precoce. Tratar erros e adicionar/atualizar testes a cada mudança.",
+    "constraints": "≤3 arquivos/≤60 linhas por passo. Sem vazamento de segredo em client. Sem acoplamento entre features. Preferir funções puras e adapters. Manter variáveis de ambiente tipadas.",
+    "acceptance_criteria": "Build, lint e testes passando; tipos corretos; pastas por feature; cobertura mínima nas linhas alteradas; commit com racional breve.",
+    "test_plan": "Para cada mudança: adicionar/atualizar unit tests de serviços; para UI, teste de render/validação; para rotas, teste com mocks; para jobs de dados, fixture determinística."
+  }
